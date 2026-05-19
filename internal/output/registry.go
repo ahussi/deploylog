@@ -2,6 +2,7 @@ package output
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 )
 
@@ -49,5 +50,6 @@ func (r *FormatterRegistry) Names() []string {
 	for n := range r.factories {
 		names = append(names, n)
 	}
+	sort.Strings(names)
 	return names
 }
