@@ -67,3 +67,11 @@ func TestValidate_MissingFields(t *testing.T) {
 		})
 	}
 }
+
+func TestValidate_InvalidStatus(t *testing.T) {
+	e := baseEvent()
+	e.Status = Status("unknown")
+	if err := e.Validate(); err != ErrInvalidStatus {
+		t.Errorf("Validate() = %v, want %v", err, ErrInvalidStatus)
+	}
+}
