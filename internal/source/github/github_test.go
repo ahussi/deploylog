@@ -81,3 +81,27 @@ func TestClient_Implements_Interface(t *testing.T) {
 	}
 	_ = context.Background()
 }
+
+// TestNewClient_Fields verifies that NewClient stores the provided owner,
+// repo, and token values by checking the resulting client is non-nil and
+// that calling Name() still returns the expected source identifier regardless
+// of the argument values passed in.
+func TestNewClient_Fields(t *testing.T) {
+	tests := []struct {
+		owner, repo, token string
+	}{
+		{"org1", "repo1", "tok1"},
+		{"org2", "repo2", ""},
+		{"", "", ""},
+	}
+	for _, tt := range tests {
+		c := github.NewClient(tt.owner, tt.repo, tt.token)
+		if c == nil {
+			t.Fatalf("NewClient(%q, %q, %q) returned nil", tt.owner, tt.repo, tt.token)
+		}
+		if got := c.Name(); got != github.SourceName {
+			t.Errorf("NewClient(%q, %q, %q).Name() = %q, want %q",
+				tt.owner, tt.repo, tt.token, got, github.SourceName)
+		}
+	}
+}
